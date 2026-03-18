@@ -430,16 +430,6 @@ import joblib
 
 app = FastAPI()
 
-# 1. Load your models
-model = joblib.load("weather_model.joblib")
-
-# 2. Your API Endpoints
-@app.get("/predict")
-async def predict(lat: float, lon: float):
-    # ... your prediction logic
-    return {"Extreme Heat Chance": 0.12}
-
-# 3. THE ENTRY POINT (Put it here!)
 if __name__ == "__main__":
     import uvicorn
     import os
@@ -447,6 +437,8 @@ if __name__ == "__main__":
     # It looks for a port assigned by Render/Railway, or defaults to 8000
     port = int(os.environ.get("PORT", 8000))
     uvicorn.run(app, host="0.0.0.0", port=port)
+
+
 #Testing 
 """lat = 21
 lon = 21
