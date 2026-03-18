@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>About this Project</title>
+        <link rel="stylesheet" href="styles.css" />
+    </head>
+    <body>
+        <header>
+            <div class="header" id="header">
+                <h1 class="title">About this Project</h1>
+                <a href="/WeatherProject.html" class="links">Go to Map</a>
+                <a href="/CorrectlyPredictedEvents.html" class="links">Past Predicted Events</a>
+                <a href="/Interpretability.html" class="links">More Model Details</a>
+            </div>
+        </header>
+
+        <section>
+            <div class="box">
+                <h2 class="intro-heading">Project Overview</h2>
+                <p class="box-text">This project is a weather prediction website 
+                    that provides users with a choropleth map to visualize various 
+                    weather phenomena across the United States. Users can select 
+                    different weather events such as extreme heat, cold, wind, hail, 
+                    snowstorms, and heavy rain to see how they are distributed 
+                    geographically. Additionally, users can input their latitude and 
+                    longitude to get specific weather data for their location.</p>
+            </div>
+        </section>
+
+        <section>
+            <div class="box">
+                <h2 class="intro-heading">How this website was built</h2>
+                <p class="box-text">This website was built using HTML, CSS, and JavaScript.
+                    The choropleth map is created with D3.js and TopoJSON for handling 
+                    geographic data. The backend is powered by Python and various machine
+                    learning libraries to process and analyze the weather data. To connect
+                    the python backend with the frontend, FastAPI was used.</p>
+            </div>
+        </section>
+
+        <section>
+            <div class="box">
+                <h2 class="intro-heading">The AI model</h2>
+                <p class="box-text">In order to accurately predict weather patterns, a
+                    XGBoost model was used. The training process took advantange of
+                    multiple optimization techniques such as ADASYN. Undersampling,
+                    SMOTE, SMOTEEN and SMOTENC were also considered. The training
+                    process also uses feature engineering to ensure to increase
+                    accuracy.</p>
+            </div>
+        </section>
+
+        <section>
+            <div class="box">
+                <h2 class="intro-heading">Data Sources</h2>
+                <p class="box-text">The weather data used in this project is sourced from the 
+                    National Oceanic and Atmospheric Administration (NOAA) and Open Meteo. 
+                    The data is processed and analyzed to provide accurate predictions 
+                    and visualizations on the map.</p>
+            </div>
+        </section>
+
+        <section>
+            <div class = "footer" id="footer">
+                <p class="footer-text">Created by Akhil Malladi</p>
+                <a class="links"href="https://colab.research.google.com/drive/1jI8qucsOci0f_3tfKZo846Jtg3GLrL-D#scrollTo=Xz_OLnbA_NRO">Google Colab Notebook</a>
+                <a class="links" href="mailto:akhil.m.malladi@gmail.com">Email</a>
+            </div>
+        </section>
+    <script src="script.js"></script>
+    </body>
+</html>

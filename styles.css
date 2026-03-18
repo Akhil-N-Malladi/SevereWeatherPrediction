@@ -1,0 +1,224 @@
+:root {
+  --header-bg: #112F4E;
+  --header-text: #fdffef;
+  --box-bg: #00C1E7;
+  --box-shadow: #D2EBF1;
+  --accent-color: #D83933;
+  --page-bg: #fdffef;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: var(--page-bg);
+  color: #000000;
+  transition: background-color 0.8s ease;
+  box-sizing: border-box;
+}
+
+.header {
+  margin-top:1%;
+  background-color: var(--header-bg);
+  color: var(--header-text);
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  transition: transform 0.5s ease, box-shadow 0.5s ease;
+  border-radius: 0.5em;
+  width: 95%;
+  padding-bottom: 2%;
+  padding-top:1%;
+  margin-left:2.5%;
+  margin-right:2.5%;
+  align-self:center;
+}
+
+.title {
+  margin-left: 5%;
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.links {
+  text-decoration: underline;
+  align-self: center;
+  margin-left: 10%;
+  font-size: 1em;
+  color:var(--header-text);
+}
+
+.box {
+  width: 85%;
+  background: var(--box-bg);
+  margin-left: 7.5%;
+  margin-right: 7.5%;
+  margin-top: 5%;
+  border: 0.1em solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  padding: 0.5% 0;
+  box-shadow: var(--box-shadow) 0px 0px 30px;
+  transition: background-color 0.5s ease, box-shadow 0.5s ease, transform 0.5s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.intro-heading {
+  font-size: 1.5em;
+  color: white;
+  margin-left: 2%;
+  align-self: flex-start;
+}
+
+.dropdown, .refresh {
+  background: var(--accent-color);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 0.5em 1em;
+  cursor: pointer;
+  font-size: 1em;
+  margin: 0.5em;
+  transition: background-color 0.8s ease;
+}
+
+.map {
+  z-index: 1;
+  width: 100%;
+}
+.location-input {
+  width: 200px;
+  padding: 0.5em;
+  margin: 0.5em;
+  margin-left:5%;
+  border: none;
+  border-radius: 5px; 
+  color:black;
+  align-self: flex-start;
+}
+.location-input::placeholder {
+  color: black;
+}
+.footer{
+  background-color: var(--header-bg);
+  color: var(--header-text);
+  padding: 1em;
+  text-align: center;
+  transition: background-color 0.8s ease, color 0.8s ease;
+  display:flex;
+  justify-content: center;
+  color:#ffffff;
+  align-self:baseline;
+  margin-top:5%;
+}
+
+.box-text{
+  color:white;
+  margin-left: 1%;
+  margin-right: 1%;
+}
+
+.event-box {
+  width: 30%;
+  background: var(--box-bg);
+  margin: 1em auto;
+  border: 0.1em solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  padding: 0.5% 0;
+  box-shadow: var(--box-shadow) 0px 0px 30px;
+  transition: transform 0.4s ease, box-shadow 0.4s ease, background-color 0.4s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color:white;
+  margin-left: 1.5%;
+}
+
+.event-heading {
+  color:white;
+  font-size: 1em;
+  align-self: center;
+}
+
+.events-text{
+  color:white;
+  margin: 5%;
+}
+.events{
+  display:flex;
+  flex-wrap: wrap;
+}
+
+.data-box {
+  margin-top:15%;
+  width: 45%;                /* Adjusted width to fit side-by-side */
+  background: rgba(255, 255, 255, 0.1); /* Subtle contrast */
+  border-radius: 10px;
+  padding: 15px;
+  margin-top: 0;             /* Remove the top margin */
+  margin-right: 0;           /* Let Flexbox handle the right alignment */
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--box-shadow) 0px 0px 15px;
+  /* REMOVE: position: absolute; */
+}
+.results-header{
+  color:white;
+  font-size:1.5em;
+  align-self:center;
+  margin-top:2%;
+  margin-left:30%;
+  padding-right:30%;
+  position: absolute;
+}
+
+.data-header {
+  color: white;
+  font-size: 1em;
+  align-self: flex-start;
+  margin-top: 2%;
+  margin-left: 10%;
+  
+  /* These lines fix the wrapping issue */
+  white-space: nowrap;       /* Forces text to stay on one line */
+  overflow: hidden;          /* Ensures it doesn't spill out of the box */
+  text-overflow: ellipsis;   /* Optional: adds '...' if it's truly too long */
+}
+
+.data-results{
+  color:white;
+  font-size:1em;
+  align-self:flex-end;
+  margin-top:2%;
+  margin-right:10%;
+  
+}
+
+.outer-box{
+  width: 90%;
+  background: var(--box-bg);
+  margin: 20px auto;
+  border-radius: 10px;
+  padding: 20px;
+  display: flex;             /* Enable Flexbox */
+  flex-direction: row;       /* Align items side-by-side */
+  justify-content: space-between; /* Pushes inputs left and data-box right */
+  align-items: flex-start;   /* Aligns both to the top */
+  position: relative;
+}
+
+.data-container{
+  margin-top:20%;  
+  display: flex;
+  width: 100%;
+  flex-direction: row;       /* Align items side-by-side */
+  justify-content: space-between; /* Pushes inputs left and data-box right */
+  align-items: flex-start;   /* Aligns both to the top */
+  position: relative;
+  transition: background-color 0.8s ease;
+}
+
+.data-container > div:first-child {
+  min-width: 200px; /* Adjust this number until it looks perfect */
+}
