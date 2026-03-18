@@ -401,9 +401,11 @@ def get_fips_from_fcc(lat, lon):
 
 
 #Fast API connection to frontend
+app.mount("/static", StaticFiles(directory="frontend"), name="static")
+
 @app.get("/")
-def home():
-    return {"message": "Welcome to the Weather Prediction API! Use the /predict endpoint with latitude and longitude parameters to get predictions."}
+async def read_index():
+    return FileResponse('frontend/WeatherProject.html')
 #Done, works properly
 @app.get("/predict")
 def predict_weather(lat,lon):
