@@ -369,7 +369,7 @@ async function fetchData() {
       document.getElementById('extreme-wind-chance').innerText = "used";
       document.getElementById('hail-chance').innerText = "all";
       document.getElementById('snowstorms-chance').innerText = "API";
-      document.getElementById('snowstorms-chance').innerText = "keys";
+      document.getElementById('heavy-rain-chance').innerText = "calls";
     } else{
       document.getElementById('extreme-heat-chance').innerText = (data['Extreme Heat Chance'] * 100).toFixed(1) + "%";
       document.getElementById('extreme-cold-chance').innerText = (data['Extreme Cold Chance'] * 100).toFixed(1) + "%";
