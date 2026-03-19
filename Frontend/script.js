@@ -358,7 +358,7 @@ async function fetchData() {
   getDataButton.disabled = true;
 
   try {
-    const response = await fetch(`http://127.0.0.1:8000/predict?lat=${lat}&lon=${lon}`);
+    const response = await fetch(`https://severeweatherprediction.onrender.com/predict?lat=${lat}&lon=${lon}`);
     if (!response.ok) {
       throw new Error(`Error: ${response.status} ${response.statusText}`);
     }
