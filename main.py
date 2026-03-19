@@ -407,7 +407,7 @@ app.mount("/static", StaticFiles(directory="Frontend"), name="static")
 
 @app.get("/")
 async def read_index():
-    return FileResponse("Frontend/WeatherProject.html')
+    return FileResponse("Frontend/WeatherProject.html")
 #Done, works properly
 @app.get("/predict")
 def predict_weather(lat,lon):
