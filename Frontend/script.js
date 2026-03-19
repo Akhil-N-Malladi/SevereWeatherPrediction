@@ -363,12 +363,21 @@ async function fetchData() {
       throw new Error(`Error: ${response.status} ${response.statusText}`);
     }
     const data =  await response.json();
-    document.getElementById('extreme-heat-chance').innerText = (data['Extreme Heat Chance'] * 100).toFixed(1) + "%";
-    document.getElementById('extreme-cold-chance').innerText = (data['Extreme Cold Chance'] * 100).toFixed(1) + "%";
-    document.getElementById('extreme-wind-chance').innerText = (data['High Speed Wind Chance'] * 100).toFixed(1) + "%";
-    document.getElementById('hail-chance').innerText = (data['Hail Chance'] * 100).toFixed(1) + "%";
-    document.getElementById('snowstorms-chance').innerText = (data['Snowstorm Chance'] * 100).toFixed(1) + "%";
-    document.getElementById('heavy-rain-chance').innerText = (data['Heavy Rain Chance'] * 100).toFixed(1) + "%";
+    if(!('extreme-heat-chance' in data)) {
+      document.getElementById('extreme-heat-chance').innerText = "random";
+      document.getElementById('extreme-cold-chance').innerText = "bums";
+      document.getElementById('extreme-wind-chance').innerText = "used";
+      document.getElementById('hail-chance').innerText = "all";
+      document.getElementById('snowstorms-chance').innerText = "API";
+      document.getElementById('snowstorms-chance').innerText = "keys";
+    } else{
+      document.getElementById('extreme-heat-chance').innerText = (data['Extreme Heat Chance'] * 100).toFixed(1) + "%";
+      document.getElementById('extreme-cold-chance').innerText = (data['Extreme Cold Chance'] * 100).toFixed(1) + "%";
+      document.getElementById('extreme-wind-chance').innerText = (data['High Speed Wind Chance'] * 100).toFixed(1) + "%";
+      document.getElementById('hail-chance').innerText = (data['Hail Chance'] * 100).toFixed(1) + "%";
+      document.getElementById('snowstorms-chance').innerText = (data['Snowstorm Chance'] * 100).toFixed(1) + "%";
+      document.getElementById('heavy-rain-chance').innerText = (data['Heavy Rain Chance'] * 100).toFixed(1) + "%";
+    }
     const currentType = document.getElementById('dropdown').value + " Chance";
     const predictionProbability = data[currentType] || 0;
 
