@@ -432,8 +432,6 @@ from fastapi import FastAPI
 import joblib
 # ... other imports
 
-app = FastAPI()
-
 if __name__ == "__main__":
     import uvicorn
     import os
