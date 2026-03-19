@@ -403,11 +403,11 @@ def get_fips_from_fcc(lat, lon):
 
 
 #Fast API connection to frontend
-app.mount("/static", StaticFiles(directory="frontend"), name="static")
+app.mount("/static", StaticFiles(directory="Frontend"), name="static")
 
 @app.get("/")
 async def read_index():
-    return FileResponse('frontend/WeatherProject.html')
+    return FileResponse("Frontend/WeatherProject.html')
 #Done, works properly
 @app.get("/predict")
 def predict_weather(lat,lon):
