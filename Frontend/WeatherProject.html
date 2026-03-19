@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Choropleth Map — Weather Project</title>
+        <link rel="stylesheet" href="styles.css" />
+    </head>
+    <body>
+        <header class="header" id="header">
+            <h1 class="title">Weather Prediction Website</h1>
+            <a href="/AboutPage.html" class="links">About</a>
+            <a href="/CorrectlyPredictedEvents.html" class="links">Past Predicted Events</a>
+            <a href="/Interpretability.html" class="links">More Model Details</a>
+        </header>
+
+        <section>
+            <div class="box" id="box">
+                <h1 class="intro-heading">Choropleth Map</h1>
+                <div>
+                    <button onclick="refreshMap()" class="refresh" id="refresh">Refresh</button>
+
+                    <select class ="dropdown" id="dropdown">
+                        <option value="Extreme Heat">Extreme Heat</option>
+                        <option value="Extreme Cold">Extreme Cold</option>
+                        <option value="Extreme Wind">Extreme Wind</option>
+                        <option value="Hail">Hail</option>
+                        <option value="Snowstorms">Snowstorms</option>
+                        <option value="Heavy Rain">Heavy Rain</option>
+                    </select>
+                </div>
+                <div class = "map" id="map" style="width:100%; height:600px;"></div>
+            </div>
+        </section>
+
+        <section>
+            <div class="outer-box" id="loc-input" style="height:30em;">
+                <div>
+                    <h1 class = "intro-heading">Lookup your location</h1>
+                    <input type="text" id="latitude" placeholder="Enter your latitude" class="location-input">
+                    <input type="text" id="longitude" placeholder="Enter your longitude" class="location-input">
+                    <button onclick="fetchData()" class="refresh" id="getData" style="align-self: flex-start; margin-left:10%">Get Data</button>
+                    <button onclick="getLocation()" class="refresh" id="getLocation" style="align-self: flex-start; margin-left:10%">Get Location</button>
+                </div>
+                <div class="data-box" id="output">
+                    <p class="results-header">Results</p>
+                    <div class="data-container">
+                        <div>
+                            <p class="data-header">Extreme Heat Chance</p>
+                            <p class="data-header">Extreme Cold Chance</p>
+                            <p class="data-header">Extreme Wind Chance</p>
+                            <p class="data-header">Hail Chance</p>
+                            <p class="data-header">Snowstorms Chance</p>
+                            <p class="data-header">Heavy Rain Chance</p>
+                        </div>
+                        
+                        <div>
+                            <p class="data-results" id="extreme-heat-chance">__%</p>
+                            <p class="data-results" id="extreme-cold-chance">__%</p>
+                            <p class="data-results" id="extreme-wind-chance">__%</p>
+                            <p class="data-results" id="hail-chance">__%</p>
+                            <p class="data-results" id="snowstorms-chance">__%</p>
+                            <p class="data-results" id="heavy-rain-chance">__%</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class = "footer" id="footer">
+                <p class="footer-text">Created by Akhil Malladi</p>
+                <a class="links"href="https://colab.research.google.com/drive/1jI8qucsOci0f_3tfKZo846Jtg3GLrL-D#scrollTo=Xz_OLnbA_NRO">Google Colab Notebook</a>
+                <a class="links" href="mailto:akhil.m.malladi@gmail.com">Email</a>
+            </div>
+        </section>
+
+        <!-- D3 and TopoJSON (CDNs) -->
+        <script src="https://d3js.org/d3.v7.min.js"></script>
+        <script src="https://unpkg.com/topojson-client@3"></script>
+        <script src="script.js"></script>
+    </body>
+</html>
