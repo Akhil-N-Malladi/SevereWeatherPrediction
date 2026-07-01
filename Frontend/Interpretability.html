@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Model Details | National Severe Weather Risk Outlook</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+
+    <header class="site-header" id="header">
+      <div class="gov-strip">
+        <span class="flag-mark" aria-hidden="true"></span>
+        <span>Official severe weather decision-support prototype</span>
+      </div>
+
+      <div class="masthead">
+        <a class="brand" href="WeatherProject.html" aria-label="National Severe Weather Risk Outlook home">
+          <span class="agency-seal" aria-hidden="true">SW</span>
+          <span>
+            <span class="eyebrow">Congressional Weather Preparedness Office</span>
+            <span class="title">Model Interpretability</span>
+          </span>
+        </a>
+
+        <nav class="nav" aria-label="Primary navigation">
+          <a class="nav-link" href="WeatherProject.html">Risk Map</a>
+          <a class="nav-link" href="AboutPage.html">About</a>
+          <a class="nav-link" href="CorrectlyPredictedEvents.html">Predicted Events</a>
+          <a class="nav-link active" href="Interpretability.html">Model Details</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="page-intro">
+        <p class="eyebrow">Transparent Risk Signals</p>
+        <h1>Model Interpretability</h1>
+        <p>
+          To understand the inner workings of our XGBoost model, we utilized SHAP
+          (SHapley Additive exPlanations) values to analyze feature importance and
+          the impact of each feature on the model's predictions. SHAP values provide
+          a unified measure of feature importance by quantifying the contribution of
+          each feature to the prediction for a specific instance. By visualizing SHAP
+          values, we can identify which features have the most significant influence
+          on the model's output and gain insights into how different weather
+          variables interact to produce accurate predictions.
+        </p>
+      </section>
+
+      <section class="interpretability-grid">
+        <article class="briefing-section hazard heat" id="Extreme-heat-interpretability">
+          <h2>Extreme Heat</h2>
+          <p>
+            Heat predictions are most sensitive to forecast maximum temperature,
+            overnight low temperature, recent humidity, cloud cover, and urban heat
+            retention indicators. The model treats persistent nighttime warmth as a
+            strong warning sign because it limits public recovery time during multi-day
+            events.
+          </p>
+        </article>
+
+        <article class="briefing-section hazard cold" id="Extreme-cold-interpretability">
+          <h2>Extreme Cold</h2>
+          <p>
+            Cold-risk decisions rely on minimum temperature, wind speed, pressure
+            changes, snow cover, and the rate of temperature decline. Locations with
+            rapid frontal passages receive additional attention because infrastructure
+            and shelter demand can shift quickly.
+          </p>
+        </article>
+
+        <article class="briefing-section hazard wind" id="Extreme-wind-interpretability">
+          <h2>Extreme Wind</h2>
+          <p>
+            Wind predictions emphasize pressure gradients, convective available
+            potential energy, storm motion, and recent gust observations. SHAP review
+            shows that the model usually elevates risk when atmospheric instability
+            and fast steering winds appear together.
+          </p>
+        </article>
+
+        <article class="briefing-section hazard hail" id="Hail-interpretability">
+          <h2>Hail</h2>
+          <p>
+            Hail risk is driven by instability, freezing-level height, vertical wind
+            shear, and storm-relative humidity. The model raises confidence when those
+            ingredients line up over counties with a history of severe convective
+            reports.
+          </p>
+        </article>
+
+        <article class="briefing-section hazard snow" id="Snowstorms-interpretability">
+          <h2>Snowstorms</h2>
+          <p>
+            Snowstorm estimates depend on surface temperature, moisture depth, lift,
+            wind exposure, and recent precipitation type. The model is designed to
+            distinguish ordinary winter precipitation from events likely to disrupt
+            travel, power restoration, and local services.
+          </p>
+        </article>
+
+        <article class="briefing-section hazard rain" id="Heavy-rain-interpretability">
+          <h2>Heavy Rain</h2>
+          <p>
+            Heavy-rain predictions focus on precipitable water, storm training
+            potential, soil saturation, terrain, and short-term rainfall intensity.
+            The strongest signals occur when atmospheric moisture and slow storm
+            movement combine over already wet areas.
+          </p>
+        </article>
+      </section>
+    </main>
+
+    <footer class="footer" id="footer">
+      <p class="footer-text">Created by Akhil Malladi</p>
+      <a href="https://colab.research.google.com/drive/1jI8qucsOci0f_3tfKZo846Jtg3GLrL-D#scrollTo=Xz_OLnbA_NRO">Google Colab Notebook</a>
+      <a href="mailto:akhil.m.malladi@gmail.com">Email</a>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
