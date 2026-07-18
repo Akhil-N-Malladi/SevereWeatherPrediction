@@ -69,6 +69,25 @@
     return ((hash / 9972) - 0.5) * spread;
   }
 
+  function countyPatchNoise(profile, hazard) {
+    const { id, lat, lon } = profile;
+
+    let hash = 0;
+    const input = `${id}-${hazard}-patch`;
+
+    for (let i = 0; i < input.length; i += 1) {
+      hash = (hash * 37 + input.charCodeAt(i)) % 7919;
+    }
+
+    const randomJitter = ((hash / 7918) - 0.5) * 22;
+
+    const wavePatch =
+      Math.sin(lat * 1.7 + lon * 0.9 + hazard.length) * 7 +
+      Math.cos(lat * 0.8 - lon * 1.4 + hazard.length * 2) * 5;
+
+    return randomJitter + wavePatch;
+  }
+
   function buildCountyProfile(county) {
     const id = String(county.id).padStart(5, "0");
     const state = id.slice(0, 2);
@@ -155,7 +174,10 @@
         (isHotDry ? 18 : 0);
     }
 
-    return Math.round(clamp(score + deterministicNoise(id, hazard, 16)));
+    const patchiness = countyPatchNoise(profile, hazard);
+    const smallNoise = deterministicNoise(id, hazard, 10);
+
+    return Math.round(clamp(score + patchiness + smallNoise));
   }
 
   function seedCountyValues(hazard) {
