@@ -44,48 +44,52 @@
   };
 
   const stateClimateProfiles = {
-    hotDry: new Set(["04", "06", "32", "35", "49"]), // AZ, CA, NV, NM, UT
-    hotHumid: new Set(["01", "05", "12", "13", "22", "28", "37", "45", "47", "48"]),
-    coldNorth: new Set(["23", "26", "27", "30", "33", "36", "38", "46", "50", "55", "56"]),
-    mountainWest: new Set(["08", "16", "30", "32", "35", "49", "56"]),
-    greatPlains: new Set(["20", "31", "38", "40", "46", "48"]),
-    pacificNorthwest: new Set(["41", "53"]),
-    gulfCoast: new Set(["01", "12", "22", "28", "48"]),
-    atlanticCoast: new Set(["10", "11", "12", "13", "24", "25", "34", "36", "37", "45", "51"]),
+    desertHeat: new Set(["04", "06", "32", "35", "49"]), // AZ, CA, NV, NM, UT
+    southernHeat: new Set(["01", "05", "12", "13", "22", "28", "37", "45", "47", "48"]),
+    northernCold: new Set(["23", "26", "27", "30", "33", "36", "38", "46", "50", "55", "56"]),
+    mountainSnow: new Set(["08", "16", "30", "32", "35", "49", "56"]),
+    plainsWind: new Set(["20", "31", "38", "40", "46", "48"]),
+    hailAlley: new Set(["08", "20", "31", "35", "40", "48"]),
+    pacificRain: new Set(["41", "53"]),
+    gulfRain: new Set(["01", "12", "22", "28", "48"]),
+    atlanticRain: new Set(["10", "11", "12", "13", "24", "25", "34", "36", "37", "45", "51"]),
   };
 
   function clamp(value, min = 3, max = 97) {
     return Math.max(min, Math.min(max, value));
   }
 
-  function deterministicNoise(id, hazard, spread = 14) {
-    const input = `${id}-${hazard}`;
+  function hashNumber(input, modulus = 1000003) {
     let hash = 0;
 
     for (let i = 0; i < input.length; i += 1) {
-      hash = (hash * 31 + input.charCodeAt(i)) % 9973;
+      hash = (hash * 37 + input.charCodeAt(i)) % modulus;
     }
 
-    return ((hash / 9972) - 0.5) * spread;
+    return hash;
   }
 
-  function countyPatchNoise(profile, hazard) {
-    const { id, lat, lon } = profile;
+  function randomBetween(key, min, max) {
+    const h = hashNumber(key);
+    return min + (h / 1000002) * (max - min);
+  }
 
-    let hash = 0;
-    const input = `${id}-${hazard}-patch`;
+  function countyRandom(id, hazard, spread = 20) {
+    return randomBetween(`${hazard}-${id}-county`, -spread / 2, spread / 2);
+  }
 
-    for (let i = 0; i < input.length; i += 1) {
-      hash = (hash * 37 + input.charCodeAt(i)) % 7919;
-    }
+  function patchRandom(profile, hazard, spread = 18) {
+    const latBand = Math.floor(profile.lat * 2.4);
+    const lonBand = Math.floor(profile.lon * 2.4);
+    const key = `${hazard}-patch-${latBand}-${lonBand}-${profile.state}`;
+    return randomBetween(key, -spread / 2, spread / 2);
+  }
 
-    const randomJitter = ((hash / 7918) - 0.5) * 22;
-
-    const wavePatch =
-      Math.sin(lat * 1.7 + lon * 0.9 + hazard.length) * 7 +
-      Math.cos(lat * 0.8 - lon * 1.4 + hazard.length * 2) * 5;
-
-    return randomJitter + wavePatch;
+  function localClusterRandom(profile, hazard, spread = 14) {
+    const latBand = Math.floor(profile.lat * 5.1);
+    const lonBand = Math.floor(profile.lon * 5.1);
+    const key = `${hazard}-cluster-${latBand}-${lonBand}-${profile.id}`;
+    return randomBetween(key, -spread / 2, spread / 2);
   }
 
   function buildCountyProfile(county) {
@@ -98,10 +102,15 @@
       state,
       lon,
       lat,
-      southness: clamp((39 - lat) * 3.2, 0, 42),
-      northness: clamp((lat - 36) * 3.4, 0, 42),
-      westness: clamp((-94 - lon) * 1.05, 0, 40),
-      eastness: clamp((lon + 98) * 0.9, 0, 35),
+
+      farSouth: clamp((37 - lat) * 4.0, 0, 42),
+      deepNorth: clamp((lat - 38) * 4.0, 0, 42),
+      farWest: clamp((-96 - lon) * 1.05, 0, 38),
+      easternMoisture: clamp((lon + 101) * 0.75, 0, 32),
+      centralPlains: clamp(25 - Math.abs(lon + 98) * 2.1, 0, 25),
+      gulfInfluence: clamp(31 - Math.abs(lat - 29) * 3.2, 0, 31),
+      midLatitudeStormZone: clamp(28 - Math.abs(lat - 37) * 3.0, 0, 28),
+      northernWinterZone: clamp(30 - Math.abs(lat - 44) * 3.2, 0, 30),
     };
   }
 
@@ -109,75 +118,128 @@
     const profile = countyProfiles.get(String(id).padStart(5, "0"));
 
     if (!profile) {
-      return clamp(45 + deterministicNoise(id, hazard, 18));
+      return Math.round(clamp(45 + countyRandom(id, hazard, 24)));
     }
 
-    const { state, southness, northness, westness, eastness, lat, lon } = profile;
+    const {
+      state,
+      lat,
+      lon,
+      farSouth,
+      deepNorth,
+      farWest,
+      easternMoisture,
+      centralPlains,
+      gulfInfluence,
+      midLatitudeStormZone,
+      northernWinterZone,
+    } = profile;
 
-    const isHotDry = stateClimateProfiles.hotDry.has(state);
-    const isHotHumid = stateClimateProfiles.hotHumid.has(state);
-    const isColdNorth = stateClimateProfiles.coldNorth.has(state);
-    const isMountainWest = stateClimateProfiles.mountainWest.has(state);
-    const isGreatPlains = stateClimateProfiles.greatPlains.has(state);
-    const isPNW = stateClimateProfiles.pacificNorthwest.has(state);
-    const isGulf = stateClimateProfiles.gulfCoast.has(state);
-    const isAtlantic = stateClimateProfiles.atlanticCoast.has(state);
+    const isDesertHeat = stateClimateProfiles.desertHeat.has(state);
+    const isSouthernHeat = stateClimateProfiles.southernHeat.has(state);
+    const isNorthernCold = stateClimateProfiles.northernCold.has(state);
+    const isMountainSnow = stateClimateProfiles.mountainSnow.has(state);
+    const isPlainsWind = stateClimateProfiles.plainsWind.has(state);
+    const isHailAlley = stateClimateProfiles.hailAlley.has(state);
+    const isPacificRain = stateClimateProfiles.pacificRain.has(state);
+    const isGulfRain = stateClimateProfiles.gulfRain.has(state);
+    const isAtlanticRain = stateClimateProfiles.atlanticRain.has(state);
 
     let score = 30;
 
     if (hazard === "Extreme Heat") {
       score =
-        18 +
-        southness +
-        (isHotDry ? 30 : 0) +
-        (isHotHumid ? 20 : 0) +
-        (westness > 15 && lat < 39 ? 10 : 0) -
-        northness * 0.35;
-    } else if (hazard === "Extreme Cold") {
-      score =
-        14 +
-        northness +
-        (isColdNorth ? 30 : 0) +
-        (isMountainWest ? 14 : 0) -
-        (isHotDry ? 18 : 0) -
-        southness * 0.25;
-    } else if (hazard === "Extreme Wind") {
-      score =
-        22 +
-        (isGreatPlains ? 28 : 0) +
-        (isMountainWest ? 12 : 0) +
-        (isAtlantic || isGulf ? 12 : 0) +
-        clamp(Math.abs(lon + 98) * -0.5 + 14, 0, 14);
-    } else if (hazard === "Hail") {
-      score =
-        15 +
-        (isGreatPlains ? 38 : 0) +
-        (state === "48" || state === "40" || state === "20" ? 12 : 0) +
-        clamp(38 - Math.abs(lat - 36) * 3, 0, 18) -
-        (isPNW ? 12 : 0);
-    } else if (hazard === "Snowstorms") {
-      score =
-        10 +
-        northness +
-        (isColdNorth ? 32 : 0) +
-        (isMountainWest ? 22 : 0) +
-        (isPNW && lat > 44 ? 10 : 0) -
-        southness * 0.45;
-    } else if (hazard === "Heavy Rain") {
-      score =
-        20 +
-        (isGulf ? 30 : 0) +
-        (isAtlantic ? 16 : 0) +
-        (isPNW ? 22 : 0) +
-        eastness * 0.25 +
-        (state === "22" || state === "12" ? 12 : 0) -
-        (isHotDry ? 18 : 0);
+        16 +
+        farSouth * 0.85 +
+        farWest * 0.55 +
+        (isDesertHeat ? 32 : 0) +
+        (isSouthernHeat ? 18 : 0) -
+        deepNorth * 0.45;
+
+      score += randomBetween(`heat-hotspot-${state}-${Math.floor(lat)}-${Math.floor(lon)}`, -8, 13);
+      score += patchRandom(profile, hazard, 24);
+      score += localClusterRandom(profile, hazard, 16);
+      score += countyRandom(profile.id, hazard, 18);
     }
 
-    const patchiness = countyPatchNoise(profile, hazard);
-    const smallNoise = deterministicNoise(id, hazard, 10);
+    else if (hazard === "Extreme Cold") {
+      score =
+        12 +
+        deepNorth * 1.0 +
+        (isNorthernCold ? 34 : 0) +
+        (isMountainSnow ? 12 : 0) -
+        farSouth * 0.55 -
+        (isDesertHeat ? 10 : 0);
 
-    return Math.round(clamp(score + patchiness + smallNoise));
+      score += randomBetween(`cold-pocket-${state}-${Math.floor(lat * 1.3)}-${Math.floor(lon * 0.7)}`, -10, 16);
+      score += patchRandom(profile, hazard, 26);
+      score += localClusterRandom(profile, hazard, 18);
+      score += countyRandom(profile.id, hazard, 20);
+    }
+
+    else if (hazard === "Extreme Wind") {
+      score =
+        18 +
+        centralPlains * 1.25 +
+        midLatitudeStormZone * 0.55 +
+        (isPlainsWind ? 30 : 0) +
+        (isMountainSnow ? 7 : 0) +
+        (isGulfRain || isAtlanticRain ? 8 : 0);
+
+      score += randomBetween(`wind-corridor-${Math.floor(lon * 1.1)}-${state}`, -14, 15);
+      score += patchRandom(profile, hazard, 32);
+      score += localClusterRandom(profile, hazard, 22);
+      score += countyRandom(profile.id, hazard, 22);
+    }
+
+    else if (hazard === "Hail") {
+      score =
+        12 +
+        centralPlains * 0.85 +
+        midLatitudeStormZone * 1.05 +
+        (isHailAlley ? 36 : 0) +
+        (state === "48" || state === "40" || state === "20" ? 10 : 0) -
+        (isPacificRain ? 10 : 0);
+
+      score += randomBetween(`hail-core-${state}-${Math.floor(lat * 0.8)}-${Math.floor(lon * 1.6)}`, -16, 18);
+      score += patchRandom(profile, hazard, 36);
+      score += localClusterRandom(profile, hazard, 26);
+      score += countyRandom(profile.id, hazard, 24);
+    }
+
+    else if (hazard === "Snowstorms") {
+      score =
+        10 +
+        northernWinterZone * 0.95 +
+        deepNorth * 0.65 +
+        (isNorthernCold ? 25 : 0) +
+        (isMountainSnow ? 30 : 0) +
+        (isPacificRain && lat > 44 ? 12 : 0) -
+        farSouth * 0.65;
+
+      score += randomBetween(`snow-band-${Math.floor(lat * 1.5)}-${Math.floor(lon * 0.9)}-${state}`, -13, 17);
+      score += patchRandom(profile, hazard, 30);
+      score += localClusterRandom(profile, hazard, 21);
+      score += countyRandom(profile.id, hazard, 21);
+    }
+
+    else if (hazard === "Heavy Rain") {
+      score =
+        15 +
+        easternMoisture * 0.85 +
+        gulfInfluence * 0.75 +
+        (isGulfRain ? 32 : 0) +
+        (isAtlanticRain ? 18 : 0) +
+        (isPacificRain ? 24 : 0) -
+        (isDesertHeat ? 22 : 0);
+
+      score += randomBetween(`rain-zone-${state}-${Math.floor(lat * 1.7)}-${Math.floor(lon * 1.2)}`, -15, 19);
+      score += patchRandom(profile, hazard, 34);
+      score += localClusterRandom(profile, hazard, 24);
+      score += countyRandom(profile.id, hazard, 24);
+    }
+
+    return Math.round(clamp(score));
   }
 
   function seedCountyValues(hazard) {
@@ -297,14 +359,15 @@
     seedCountyValues(type);
     setControlColor(palette.button);
 
-    const contrastScale = d3.scalePow().exponent(1.18).domain([0, 100]).range([0, 1]);
+    const contrastScale = d3.scalePow().exponent(1.35).domain([0, 100]).range([0, 1]);
 
     if (svg) {
       svg
         .select(".counties")
         .selectAll("path")
+        .interrupt()
         .transition()
-        .duration(700)
+        .duration(180)
         .attr("fill", (county) => {
           const value = countyValues.get(String(county.id).padStart(5, "0")) || 0;
           return activeInterpolator(contrastScale(value));
@@ -360,12 +423,19 @@ async function fetchData() {
 
     setResult("extreme-heat-chance", getNumericValue(data, ["Extreme Heat Chance", "extreme-heat-chance"]));
     setResult("extreme-cold-chance", getNumericValue(data, ["Extreme Cold Chance", "extreme-cold-chance"]));
+
     setResult(
       "extreme-wind-chance",
       getNumericValue(data, ["High Speed Wind Chance", "Extreme Wind Chance", "extreme-wind-chance"])
     );
+
     setResult("hail-chance", getNumericValue(data, ["Hail Chance", "hail-chance"]));
-    setResult("snowstorms-chance", getNumericValue(data, ["Snowstorm Chance", "Snowstorms Chance", "snowstorms-chance"]));
+
+    setResult(
+      "snowstorms-chance",
+      getNumericValue(data, ["Snowstorm Chance", "Snowstorms Chance", "snowstorms-chance"])
+    );
+
     setResult("heavy-rain-chance", getNumericValue(data, ["Heavy Rain Chance", "heavy-rain-chance"]));
 
     if (innerBox) {
