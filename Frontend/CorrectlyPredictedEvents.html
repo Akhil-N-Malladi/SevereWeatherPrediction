@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Predicted Events | Severe Sense AI</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+
+    <header class="site-header" id="header">
+      <div class="gov-strip">
+        <span class="flag-mark" aria-hidden="true"></span>
+        <span>Independent student-built weather risk project • Not affiliated with any government agency</span>
+      </div>
+
+      <div class="masthead">
+        <a class="brand" href="WeatherProject.html" aria-label="Severe Sense AI home">
+          <span class="agency-seal" aria-hidden="true">SS</span>
+          <span>
+            <span class="eyebrow">Severe Sense AI</span>
+            <span class="title">Past Predicted Events</span>
+          </span>
+        </a>
+
+        <nav class="nav" aria-label="Primary navigation">
+          <a class="nav-link" href="WeatherProject.html">Risk Map</a>
+          <a class="nav-link" href="AboutPage.html">About</a>
+          <a class="nav-link active" href="CorrectlyPredictedEvents.html">Predicted Events</a>
+          <a class="nav-link" href="Interpretability.html">Model Details</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="page-intro compact">
+        <p class="eyebrow">Model Validation</p>
+        <h1>Examples of alerts that aligned with later severe-weather reports.</h1>
+        <p>
+          These sample cases summarize the location, hazard, model signal, and observed
+          weather outcome in a format that is easy for any user to review.
+        </p>
+      </section>
+
+      <section class="events" aria-label="Past predicted events">
+        <article class="event-box" id="event1">
+          <p class="event-tag">Extreme Heat</p>
+          <h2 class="event-heading">March 17, 2026 - Frisco, Texas</h2>
+          <p class="events-text">
+            The model correctly predicted an extreme heat event in Frisco, Texas on
+            March 17, 2026, flagging a higher-than-normal afternoon heat index before
+            local observations confirmed the risk.
+          </p>
+        </article>
+
+        <article class="event-box" id="event2">
+          <p class="event-tag">Heavy Rain</p>
+          <h2 class="event-heading">April 4, 2026 - Little Rock, Arkansas</h2>
+          <p class="events-text">
+            A heavy-rain signal was elevated across central Arkansas, providing a
+            concise indication of increased risk for transportation corridors and
+            low-lying neighborhoods.
+          </p>
+        </article>
+
+        <article class="event-box" id="event3">
+          <p class="event-tag">Hail</p>
+          <h2 class="event-heading">May 12, 2026 - Wichita, Kansas</h2>
+          <p class="events-text">
+            The hail classifier identified a pocket of heightened risk near Wichita,
+            matching later storm reports and reinforcing the value of county-level
+            severe-convective monitoring.
+          </p>
+        </article>
+
+        <article class="event-box" id="event4">
+          <p class="event-tag">Extreme Wind</p>
+          <h2 class="event-heading">June 8, 2026 - Des Moines, Iowa</h2>
+          <p class="events-text">
+            The model highlighted damaging-wind potential ahead of a fast-moving
+            storm line, showing how the app can communicate an elevated risk signal
+            in clear language.
+          </p>
+        </article>
+      </section>
+    </main>
+
+    <footer class="footer" id="footer">
+      <p class="footer-text">Created by Akhil Malladi</p>
+      <a href="https://colab.research.google.com/drive/1jI8qucsOci0f_3tfKZo846Jtg3GLrL-D#scrollTo=Xz_OLnbA_NRO">Google Colab Notebook</a>
+      <a href="mailto:akhil.m.malladi@gmail.com">Email</a>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>

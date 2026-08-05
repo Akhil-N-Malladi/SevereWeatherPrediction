@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Severe Sense AI</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+
+    <header class="site-header" id="header">
+      <div class="gov-strip">
+        <span class="flag-mark" aria-hidden="true"></span>
+        <span>Independent student-built weather risk project • Not affiliated with any government agency</span>
+      </div>
+
+      <div class="masthead">
+        <a class="brand" href="WeatherProject.html" aria-label="Severe Sense AI home">
+          <span class="agency-seal" aria-hidden="true">SS</span>
+          <span>
+            <span class="eyebrow">Severe Sense AI</span>
+            <span class="title">Severe Sense AI</span>
+          </span>
+        </a>
+
+        <nav class="nav" aria-label="Primary navigation">
+          <a class="nav-link active" href="WeatherProject.html">Risk Map</a>
+          <a class="nav-link" href="AboutPage.html">About</a>
+          <a class="nav-link" href="CorrectlyPredictedEvents.html">Predicted Events</a>
+          <a class="nav-link" href="Interpretability.html">Model Details</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="hero-panel">
+        <div class="hero-copy">
+          <p class="eyebrow">Student-Built Weather Intelligence</p>
+          <h1>Understand severe-weather risk at the county level.</h1>
+          <p>
+            This dashboard translates meteorological inputs into a plain-language
+            outlook for extreme heat, cold, wind, hail, snowstorms, and heavy rain
+            across the United States.
+          </p>
+        </div>
+        <aside class="briefing-card" aria-label="Current briefing summary">
+          <p class="kicker">Project Snapshot</p>
+          <dl class="stat-list">
+            <div>
+              <dt>Hazards</dt>
+              <dd>6</dd>
+            </div>
+            <div>
+              <dt>County View</dt>
+              <dd>3,100+</dd>
+            </div>
+            <div>
+              <dt>Update Cycle</dt>
+              <dd>Daily</dd>
+            </div>
+          </dl>
+        </aside>
+      </section>
+
+      <section class="content-band">
+        <div class="section-heading">
+          <p class="eyebrow">Interactive Map</p>
+          <h2>Choropleth Map</h2>
+        </div>
+
+        <div class="map-shell" id="box">
+          <div class="tool-row" aria-label="Map controls">
+            <label class="field-label" for="dropdown">Weather Event</label>
+            <select class="dropdown" id="dropdown">
+              <option value="Extreme Heat">Extreme Heat</option>
+              <option value="Extreme Cold">Extreme Cold</option>
+              <option value="Extreme Wind">Extreme Wind</option>
+              <option value="Hail">Hail</option>
+              <option value="Snowstorms">Snowstorms</option>
+              <option value="Heavy Rain">Heavy Rain</option>
+            </select>
+            <button onclick="refreshMap()" class="button button-primary" id="refresh" type="button">Refresh Map</button>
+          </div>
+          <div class="map" id="map" aria-label="United States county risk map"></div>
+        </div>
+      </section>
+
+      <section class="content-band lookup-band" id="loc-input">
+        <div class="section-heading">
+          <p class="eyebrow">Location Lookup</p>
+          <h2>Lookup Your Location</h2>
+          <p>
+            Enter a latitude and longitude to request a local severe-weather risk
+            estimate for personal planning, learning, and preparedness.
+          </p>
+        </div>
+
+        <div class="lookup-grid">
+          <form class="lookup-form" onsubmit="event.preventDefault(); fetchData();">
+            <label class="field-label" for="latitude">Latitude</label>
+            <input type="text" id="latitude" placeholder="Example: 38.8977" class="location-input" inputmode="decimal" />
+
+            <label class="field-label" for="longitude">Longitude</label>
+            <input type="text" id="longitude" placeholder="Example: -77.0365" class="location-input" inputmode="decimal" />
+
+            <div class="button-row">
+              <button class="button button-primary" id="getData" type="submit">Get Data</button>
+              <button onclick="getLocation()" class="button button-secondary" id="getLocation" type="button">Use My Location</button>
+            </div>
+          </form>
+
+          <div class="data-box" id="output" aria-live="polite">
+            <p class="results-header">Results</p>
+            <div class="data-container">
+              <div class="result-row">
+                <span class="data-header">Extreme Heat Chance</span>
+                <span class="data-results" id="extreme-heat-chance">__%</span>
+              </div>
+              <div class="result-row">
+                <span class="data-header">Extreme Cold Chance</span>
+                <span class="data-results" id="extreme-cold-chance">__%</span>
+              </div>
+              <div class="result-row">
+                <span class="data-header">Extreme Wind Chance</span>
+                <span class="data-results" id="extreme-wind-chance">__%</span>
+              </div>
+              <div class="result-row">
+                <span class="data-header">Hail Chance</span>
+                <span class="data-results" id="hail-chance">__%</span>
+              </div>
+              <div class="result-row">
+                <span class="data-header">Snowstorms Chance</span>
+                <span class="data-results" id="snowstorms-chance">__%</span>
+              </div>
+              <div class="result-row">
+                <span class="data-header">Heavy Rain Chance</span>
+                <span class="data-results" id="heavy-rain-chance">__%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer" id="footer">
+      <p class="footer-text">Created by Akhil Malladi</p>
+      <a href="https://colab.research.google.com/drive/1jI8qucsOci0f_3tfKZo846Jtg3GLrL-D#scrollTo=Xz_OLnbA_NRO">Google Colab Notebook</a>
+      <a href="mailto:akhil.m.malladi@gmail.com">Email</a>
+    </footer>
+
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://unpkg.com/topojson-client@3"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
